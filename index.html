@@ -1,13 +1,109 @@
 <!DOCTYPE html>
 <html lang="en">
+    
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+  <meta charset="UTF-8">
+  <title>Hồ sơ cá nhân</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 20px;
+      display: flex;
+      gap: 50px;
+    }
+
+    form, .profile {
+      padding: 20px;
+      border: 1px solid #ccc;
+      border-radius: 10px;
+      width: 300px;
+    }
+
+    input {
+      display: block;
+      margin-bottom: 10px;
+      width: 100%;
+      padding: 5px;
+    }
+
+    button {
+      padding: 8px 12px;
+    }
+
+    img {
+      width: 100px;
+      height: 100px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-top: 10px;
+    }
+  </style>
 </head>
 <body>
-    Hello world
-    <H1>BTBL</H1>
-    <p style="color: aqua;">ưghdwuh</p>
+  <!-- Form tạo và cập nhật hồ sơ -->
+  <form id="profileForm">
+    <h3>Tạo hồ sơ cá nhân</h3>
+    <input type="text" id="name" placeholder="Họ tên" required />
+    <input type="email" id="email" placeholder="Email" required />
+    <input type="tel" id="phone" placeholder="Số điện thoại" />
+    <input type="text" id="address" placeholder="Địa chỉ" />
+    <input type="url" id="avatar" placeholder="Link ảnh đại diện (URL)" />
+    <button type="submit">Lưu hồ sơ</button>
+  </form>
+
+  <!-- Hiển thị hồ sơ -->
+  <div class="profile">
+    <h3>Hồ sơ cá nhân</h3>
+    <img id="displayAvatar" src="" alt="Ảnh đại diện">
+    <p><strong>Họ tên:</strong> <span id="displayName"></span></p>
+    <p><strong>Email:</strong> <span id="displayEmail"></span></p>
+    <p><strong>SĐT:</strong> <span id="displayPhone"></span></p>
+    <p><strong>Địa chỉ:</strong> <span id="displayAddress"></span></p>
+  </div>
+
+  <script>
+    const form = document.getElementById('profileForm');
+
+    // Hiển thị dữ liệu đã lưu khi tải trang
+    window.addEventListener('DOMContentLoaded', loadProfile);
+
+    form.addEventListener('submit', function(e) {
+      e.preventDefault();
+
+      const profileData = {
+        name: document.getElementById('name').value,
+        email: document.getElementById('email').value,
+        phone: document.getElementById('phone').value,
+        address: document.getElementById('address').value,
+        avatar: document.getElementById('avatar').value
+      };
+
+      // Lưu vào localStorage
+      localStorage.setItem('userProfile', JSON.stringify(profileData));
+
+      // Cập nhật giao diện
+      loadProfile();
+      alert("Hồ sơ đã được lưu!");
+    });
+
+    function loadProfile() {
+      const storedProfile = localStorage.getItem('userProfile');
+      if (storedProfile) {
+        const data = JSON.parse(storedProfile);
+        document.getElementById('displayName').textContent = data.name;
+        document.getElementById('displayEmail').textContent = data.email;
+        document.getElementById('displayPhone').textContent = data.phone;
+        document.getElementById('displayAddress').textContent = data.address;
+        document.getElementById('displayAvatar').src = data.avatar || 'https://via.placeholder.com/100';
+        
+        // Đổ dữ liệu vào form để cập nhật
+        document.getElementById('name').value = data.name;
+        document.getElementById('email').value = data.email;
+        document.getElementById('phone').value = data.phone;
+        document.getElementById('address').value = data.address;
+        document.getElementById('avatar').value = data.avatar;
+      }
+    }
+  </script>
 </body>
 </html>
